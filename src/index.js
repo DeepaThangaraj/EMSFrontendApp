@@ -3,12 +3,27 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { AuthProvider } from 'react-oidc-context';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+const oidcConfig = {
+  authority: "http://localhost:8080/realms/cerebra",
+  client_id: "EmployeeManagementRestAPI",
+  redirect_uri: "http://localhost:3000",
+  onSigninCallback: () => {
+    window.history.replaceState(
+      {},
+      document.title,
+      window.location.pathname
+    )
+  }
+}
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <AuthProvider {...oidcConfig}>
+    <React.StrictMode>
+      <App />
+    </React.StrictMode>
+  </AuthProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
